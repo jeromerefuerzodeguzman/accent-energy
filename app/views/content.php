@@ -1,4 +1,3 @@
-
 <div class="row">
 	<div class="large-6 columns">
 		<h5 class="subheader">Agents Currently Logged In (<?= date('Y-m-d') ?>)</h5>
@@ -19,7 +18,7 @@
 					<span class="prefix">Agents Total</span>
 				</div>
 				<div class="small-6 large-6 columns">
-					<input type="text" value="<?= count($agents) ?>">
+					<input type="text" id="total_agents" value="">
 				</div>
 			</div>
 			<div class="row collapse">
@@ -27,7 +26,7 @@
 					<span class="prefix">Agents Avail.</span>
 				</div>
 				<div class="small-6 large-6 columns">
-					<input type="text" value="<?= $available ?>">
+					<input type="text" id="agents_available" value="">
 				</div>
 			</div>
 			<div class="row collapse">
@@ -35,35 +34,23 @@
 					<span class="prefix">Agents in ACD</span>
 				</div>
 				<div class="small-6 large-6 columns">
-					<input type="text" value="<?= $connected ?>">
+					<input type="text" id="agents_acd" value="">
 				</div>
 			</div>
 			<div class="row collapse">
 				<div class="small-6 large-6 columns">
-					<span class="prefix">Agents in Pause</span>
+					<span class="prefix">Agents in Manual</span>
 				</div>
 				<div class="small-6 large-6 columns">
-					<input type="text" value="<?= $paused ?>">
+					<input type="text" id="agents_manual" value="">
 				</div>
 			</div>
-			<!-- <div class="row collapse">
-				<div class="small-6 large-6 columns">
-					<span class="prefix">% Avail.</span>
-				</div>
-				<div class="small-6 large-6 columns">
-					<?php 
-						$value = 0;
-						if(count($agents)>0) $value = round(($available/count($agents))*100, 2);
-					?>
-					<input type="text" value="<?= $value ?>">
-				</div>
-			</div> -->
 			<div class="row collapse">
 				<div class="small-6 large-6 columns">
-					<span class="prefix">Agents in ACW</span>
+					<span class="prefix">Agents in Break</span>
 				</div>
 				<div class="small-6 large-6 columns">
-					<input type="text" value="<?= $acw ?>">
+					<input type="text" id="agents_break" value="">
 				</div>
 			</div>
 			<hr />
@@ -73,31 +60,31 @@
 					<span class="prefix">Calls Waiting</span>
 				</div>
 				<div class="small-6 large-6 columns">
-					<input type="text" value="<?= $calls_waiting['total'] ?>">
+					<input type="text" id="calls_waiting" value="">
 				</div>
 			</div>
 			<div class="row collapse">
 				<div class="small-6 large-6 columns">
-					<span class="prefix">Oldest Call Waiting</span>
+					<span class="prefix">Longest Call Waiting</span>
 				</div>
 				<div class="small-6 large-6 columns">
-					<input type="text" value="<?= $calls_waiting['total']=='0'?'00:00':Record::get_time_difference($calls_waiting['oldest']) ?>">
-				</div>
-			</div>
-			<div class="row collapse">
-				<div class="small-6 large-6 columns">
-					<span class="prefix">ACD Calls</span>
-				</div>
-				<div class="small-6 large-6 columns">
-					<input type="text" value="<?= $acd_calls ?>">
+					<input type="text" id="longest_call_wait" value="">
 				</div>
 			</div>
 			<div class="row collapse">
 				<div class="small-6 large-6 columns">
-					<span class="prefix">Abandoned Calls</span>
+					<span class="prefix">Total ACD Calls</span>
 				</div>
 				<div class="small-6 large-6 columns">
-					<input type="text" value="<?= $calls_abandoned ?>">
+					<input type="text" id="calls_acd" value="">
+				</div>
+			</div>
+			<div class="row collapse">
+				<div class="small-6 large-6 columns">
+					<span class="prefix">Total Abandoned Calls</span>
+				</div>
+				<div class="small-6 large-6 columns">
+					<input type="text" id="calls_abandon" value="">
 				</div>
 			</div>
 			<div class="row collapse">
@@ -105,7 +92,7 @@
 					<span class="prefix">Total Calls</span>
 				</div>
 				<div class="small-6 large-6 columns">
-					<input type="text" value="<?= $total_calls ?>">
+					<input type="text" id="calls_total" value="">
 				</div>
 			</div>
 			<hr />

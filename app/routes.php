@@ -46,16 +46,18 @@ Route::get('/content', function()
 		->with('agents', $record->current_agents());
 });
 
-Route::get('/interval', function()
+/*Route::get('/interval', function()
 {
 	$record = new Record;
 
 	return View::make('interval')
 		->with('inbound_logs',  $record->inbound_logs());
-});
+});*/
 
 Route::get('/ameyo', function()
 {
+	$today = date("Y-m-d");
+
 	$campaigns = Ameyo::inb_campaigns();
 	$campaign_ids = '';
 	foreach ($campaigns as $campaign) {
@@ -132,13 +134,13 @@ Route::get('/ameyo', function()
 	//QUERY 5
 	$query5 ="
 		select (
-			select count(*) from call_history where campaign_id in ($campaign_ids) and is_outbound = 'f' and date_added between '2014-03-17 00:00:00' and '2014-03-17 23:59:59'
+			select count(*) from call_history where campaign_id in ($campaign_ids) and is_outbound = 'f' and date_added between '$today 00:00:00' and '$today 23:59:59'
 		) as total_calls,
 		(
-			select count(*) from call_history where campaign_id in ($campaign_ids) and is_outbound = 'f' and call_result = 'FAILURE' and date_added between '2014-03-17 00:00:00' and '2014-03-17 23:59:59'
+			select count(*) from call_history where campaign_id in ($campaign_ids) and is_outbound = 'f' and call_result = 'FAILURE' and date_added between '$today 00:00:00' and '$today 23:59:59'
 		) as total_abandon,
 		(
-			select count(*) from call_history where campaign_id in ($campaign_ids) and is_outbound = 'f' and call_result != 'FAILURE' and date_added between '2014-03-17 00:00:00' and '2014-03-17 23:59:59'
+			select count(*) from call_history where campaign_id in ($campaign_ids) and is_outbound = 'f' and call_result != 'FAILURE' and date_added between '$today 00:00:00' and '$today 23:59:59'
 		) as total_acd
 	";
 	$result5 = DB::select($query5);
@@ -196,4 +198,48 @@ Route::get('/ameyo', function()
 
 	return json_encode($results);
 	//return var_dump(DB::connection('pgsql')->select('select * from campaign_runtime_data'));
+});
+
+Route::get('/interval', function()
+{
+	$today = date("Y-m-d");
+	//"2014-03-17";
+
+	$query_offered = "select date_added from call_history where campaign_id in (8,9,10) and is_outbound = 'f' and date_added between '$today 00:00:00' and '$today 23:59:59' order by date_added ";
+	$query_answered = "select date_added from call_history where campaign_id in (8,9,10) and is_outbound = 'f' and call_result ilike '%SUCCESS%' and date_added between '$today 00:00:00' and '$today 23:59:59'  order by date_added ";
+	$query_abandoned = "select date_added from call_history where campaign_id in (8,9,10) and is_outbound = 'f' and call_result ilike '%FAIL%' and date_added between '$today 00:00:00' and '$today 23:59:59'  order by date_added ";
+
+	$result_offered = DB::select($query_offered);
+	$result_answered = DB::select($query_answered);
+	$result_abandoned = DB::select($query_abandoned);
+
+
+	$data = array();
+
+	foreach ($result_offered as $result) {
+		/*var_dump(substr($result->date_added, 11, 2));
+		var_dump(substr($result->date_added, 17, 2));*/
+		$data['offered'][] = array(
+				'minutes' => substr($result->date_added, 17, 2),
+				'hour' => substr($result->date_added, 11, 2),
+			);
+		/*var_dump($result);*/
+	}
+
+	foreach ($result_answered as $result) {
+		$data['answered'][] = array(
+				'minutes' => substr($result->date_added, 17, 2),
+				'hour' => substr($result->date_added, 11, 2),
+			);
+	}
+
+	foreach ($result_abandoned as $result) {
+		$data['abandoned'][] = array(
+				'minutes' => substr($result->date_added, 17, 2),
+				'hour' => substr($result->date_added, 11, 2),
+			);
+	}
+
+	return View::make('interval')
+		->with('inbound_logs',  $data);
 });
