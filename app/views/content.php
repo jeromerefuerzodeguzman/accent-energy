@@ -3,10 +3,27 @@
 		<h5 class="subheader">Agents Currently Logged In (<?= date('Y-m-d') ?>)</h5>
 		<table class="large-12" style="font-size:14px;">
 			<thead>
-				<th>#</th><th>Name</th><th>Status</th><th>Time</th>
+				<th>Name</th><th>Auto Call</th><th>Status</th><th>Time</th>
 			</thead>
 			<tbody>
-				
+				<?php 
+					foreach($lists as $list) {
+						$name = explode('-', $list->session_id);
+						$today = date("Y-m-d h:i:s.u");
+						$interval = date_diff(date_create($list->status_date), date_create($today));
+						$time = $interval->format('%H:%I:%S');
+						$autocall = $list->autocall_name == 'agent_set_auto_call_on' ? '<img width="25px" src=' . URL::to('/') .'/img/on.gif' .'>' : '<img width="25px" src=' . URL::to('/') .'/img/off.gif' .'>';
+						$row = "
+						<tr>
+							<td>$name[3]</td>
+							<td>$autocall</td>
+							<td>$list->status_name</td>
+							<td>$time</td>
+						</tr>
+						";
+						echo $row;
+					}
+				?>
 			</tbody>
 		</table>
 	</div>

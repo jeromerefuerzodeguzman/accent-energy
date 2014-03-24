@@ -45,7 +45,25 @@ Route::get('/content', function()
 		->with('total_calls',  $record->total_calls('', FALSE))
 		->with('agents', $record->current_agents());*/
 
-	return View::make('content');
+	$today = date("Y-m-d");
+	
+	$query = "select *
+				from (select session_id,
+						case when break_end_ready_time is null then break_time else break_end_ready_time end as status_date,
+						case when break_end_ready_reason is null then break_reason else break_end_ready_reason end as status_name
+					from cc_user_ready_history 
+					where break_time between '$today 00:00:00' and '$today 23:59:59' and (break_end_ready_time is null or ready_end_time is null and break_end_ready_reason != 'Logged Out')) as status
+				left outer join (select session_id,
+						case when auto_call_on_end_time is null then auto_call_on_start_time else auto_call_on_end_time end as autocall_date,
+						case when end_reason is null then auto_call_start_reason else end_reason end as autocall_name
+					from cc_user_autocall_history 
+					where auto_call_on_start_time between '$today 00:00:00' and '$today 23:59:59' and auto_call_off_end_time is null) as autocall
+				on status.session_id = autocall.session_id";
+
+	$result = DB::select($query);
+
+	return View::make('content')
+			->with('lists', $result);
 });
 
 /*Route::get('/interval', function()
