@@ -20,7 +20,7 @@ Route::get('/', function()
 
 Route::get('/content', function()
 {
-	$fp = stream_socket_client("tcp://192.168.200.244:1678", $errno, $errstr, 30);
+	/*$fp = stream_socket_client("tcp://192.168.200.244:1678", $errno, $errstr, 30);
 	if (!$fp) {
 	    echo "$errstr ($errno)<br />\n";
 	} else {
@@ -43,7 +43,9 @@ Route::get('/content', function()
 		->with('acd_calls',  $record->total_connected_calls('', FALSE))
 		->with('calls_abandoned',  $record->calls_abandoned())
 		->with('total_calls',  $record->total_calls('', FALSE))
-		->with('agents', $record->current_agents());
+		->with('agents', $record->current_agents());*/
+
+	return View::make('content');
 });
 
 /*Route::get('/interval', function()

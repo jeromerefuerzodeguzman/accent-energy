@@ -80,6 +80,7 @@
 			$('#calls_total').val(data['history']['total_calls']);
 			$('#longest_call_wait').val(data['queue']['longest_call_waiting']);
 			console.log('refresh!');
+			
 		}
 		
 	</script>
