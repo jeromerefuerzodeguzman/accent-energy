@@ -3,7 +3,7 @@
 		<h5 class="subheader">Agents Currently Logged In (<?= date('Y-m-d') ?>)</h5>
 		<table class="large-12" style="font-size:14px;">
 			<thead>
-				<th>Name</th><th>Auto Call</th><th>Status</th><th>Status Time</th>
+				<th>Name</th><th>Ready</th><th>Auto Call</th><th>Status</th><th>Status Time</th>
 			</thead>
 			<tbody>
 				<?php 
@@ -17,9 +17,11 @@
 						$time = $interval->diff($offset);
 						$diff = $time->format('%H:%I:%S');
 						$autocall = $list->autocall_name == 'agent_set_auto_call_on' ? '<img width="25px" src=' . URL::to('/') .'/img/on.gif' .'>' : '<img width="25px" src=' . URL::to('/') .'/img/off.gif' .'>';
+						$ready = $list->status_name == 'Available' ? '<img width="25px" src=' . URL::to('/') .'/img/on.gif' .'>' : '<img width="25px" src=' . URL::to('/') .'/img/off.gif' .'>';
 						$row = "
 						<tr>
 							<td>$name[3]</td>
+							<td>$ready</td>
 							<td>$autocall</td>
 							<td>$list->status_name</td>
 							<td>$diff</td>
