@@ -47,7 +47,7 @@ Route::get('/content', function()
 
 	$today = date("Y-m-d");
 	
-	$query = "select *
+	$query = "select status.*, autocall.autocall_name
 				from (select session_id,
 						case when break_end_ready_time is null then break_time else break_end_ready_time end as status_date,
 						case when break_end_ready_reason is null then break_reason else break_end_ready_reason end as status_name
@@ -61,6 +61,8 @@ Route::get('/content', function()
 				on status.session_id = autocall.session_id";
 
 	$result = DB::select($query);
+
+	//echo $query;
 
 	return View::make('content')
 			->with('lists', $result);

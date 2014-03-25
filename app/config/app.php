@@ -39,7 +39,7 @@ return array(
 	|
 	*/
 
-	'timezone' => 'Asia/Singapore',
+	'timezone' => 'America/Santiago',
 
 	/*
 	|--------------------------------------------------------------------------
